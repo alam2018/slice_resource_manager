@@ -1,0 +1,6 @@
+total resource : 600
+
+user alloc: 50%
+
+result for user: 14
+

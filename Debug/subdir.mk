@@ -4,12 +4,15 @@
 
 # Add inputs and outputs from these tool invocations to the build variables 
 C_SRCS += \
+../getLoad.c \
 ../slice_resource_main.c 
 
 OBJS += \
+./getLoad.o \
 ./slice_resource_main.o 
 
 C_DEPS += \
+./getLoad.d \
 ./slice_resource_main.d 
 
 
