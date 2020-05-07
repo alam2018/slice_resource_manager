@@ -16,10 +16,19 @@ data = pd.read_csv('/home/mdaa/eclipse-workspace/slice_resource/user_alloc.csv',
 
 
 x1_prio = []
+x1_prio_old = []
 x1_req = []
 x1_alloc = []
 x1_pre_alloc = []
 y = []
+
+
+#For 2nd user
+x1_prio2 = []
+x1_prio2_old = []
+x1_req2 = []
+x1_alloc2 = []
+x1_pre_alloc2 = []
 
 #slice_id = data.iloc[:,0:1].values
 #prio = data.iloc[:,4:5].values
@@ -28,21 +37,30 @@ y = []
 
 slice_id = data.iloc[:,1:2].values
 prio = data.iloc[:,5:6].values
+prio_old = data.iloc[:,2:3].values
 req = data.iloc[:,3:4].values
 pre_alloc = data.iloc[:,4:5].values
 alloc = data.iloc[:,6:7].values
 
 
+#For 2nd user
+prio2 = data.iloc[:,5:6].values
+req2 = data.iloc[:,3:4].values
+pre_alloc2 = data.iloc[:,4:5].values
+alloc2 = data.iloc[:,6:7].values
+
 y_scale = 0
 for index in range (data.shape[0]):
 #    if slice_id[index,0] == 3:
-     if slice_id[index,0] == 8:
+     if slice_id[index,0] == 18:
         x1_prio.append (prio[index,0])
+        x1_prio_old.append (prio_old[index,0])
         x1_req.append (req[index,0])
         x1_alloc.append (alloc[index,0])
         x1_pre_alloc.append (pre_alloc[index,0])
 #        y.append(y_scale)
 #        y_scale = y_scale + 1
+        
         
         
 plt.plot(x1_prio, color = 'green', label = 'Slice Priority', marker='d', markersize=3)
@@ -67,6 +85,50 @@ plt.legend(loc='best', prop={'size': 6})
 plt.savefig('res_alloc.png',bbox_inches="tight", pad_inches=0.1, dpi=300)
 plt.show()
 
+
+
+#2 slice comperison
+for index in range (data.shape[0]):
+#    if slice_id[index,0] == 3:
+     if slice_id[index,0] == 14:
+        x1_prio2.append (prio[index,0])
+        x1_prio2_old.append (prio_old[index,0])
+        x1_req2.append (req[index,0])
+        x1_alloc2.append (alloc[index,0])
+        x1_pre_alloc2.append (pre_alloc[index,0])
+        
+
+
+fig = plt.figure()
+ax = fig.add_subplot(111)
+
+lns1 = ax.plot(x1_req, color = 'brown', label = 'Slice 1 request', linestyle = '--', marker='x', markersize=2)
+lns2 = ax.plot(x1_alloc, color = 'green', label = 'Slice 1 Allocation', marker='o', markersize=2)
+lns4 = ax.plot(x1_req2, color = 'purple', label = 'Slice 2 request', linestyle = '--', marker='^', markersize=2)
+lns5 = ax.plot(x1_alloc2, color = 'orange', label = 'Slice 2 allocation', marker='+', markersize=2)
+
+ax2 = ax.twinx()
+lns3 = ax2.plot(x1_prio, color = 'blue', label = 'Slice 1 Priority', marker='d', markersize=3)
+lns6 = ax2.plot(x1_prio2, color = 'red', label = 'Slice 2 Priority', marker='*', markersize=3)
+
+
+# added these six lines
+lns = lns1+lns2+lns3+lns4+lns5+lns6
+labs = [l.get_label() for l in lns]
+ax.legend(lns, labs, loc='best', prop={'size': 6})
+
+ax.grid()
+ax.set_xlabel("Time (s)")
+ax.set_ylabel(r"Data Rate (MBps)")
+ax2.set_ylabel(r"Priority")
+ax2.set_ylim(0, 130)
+ax.set_ylim(0,70)
+plt.savefig('slice_comp.png',bbox_inches="tight", pad_inches=0.1, dpi=300)
+plt.show()
+
+
+
+
 res_req =  []
 res_alloc = []
 res_available = []
@@ -89,7 +151,7 @@ slice_count = 0
 simulation_time = 60
 total_res = 0
 #Check this valiue from the c code named "#define TOTAL_CAPACITY"
-const_res = 520
+const_res = 560
 
 
 for index in range (total_slice):
